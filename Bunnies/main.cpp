@@ -14,5 +14,6 @@ int main() {
 		mainscreen.getChoice();
 		//if (checkForExtinction()) break;
 	}
+	std::cout << "It seems all Bunnies have died!\n";
 	_getch();
 }

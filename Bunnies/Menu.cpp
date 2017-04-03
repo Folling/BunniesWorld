@@ -3,11 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-
-Menu::Menu()
-{
-}
-
+//generic method to display the options each user has, probably am going to just make this visible by command
 void Menu::display() {
 	std::cout << "Please select what you want to do: \n";
 	std::cout << "1 -- print the list\n";
@@ -16,6 +12,7 @@ void Menu::display() {
 	std::cout << "4 -- exit the programm\n";
 }
 
+//gets user input
 void Menu::getChoice() {
 	int choice;
 	std::cin >> choice;
@@ -32,6 +29,7 @@ void Menu::getChoice() {
 	}
 }
 
+//method to save the colony, to be inmplemented.
 void Menu::saveColony() {
 
 }

@@ -9,7 +9,7 @@
 struct Bunny;
 
 Bunny* newBunny();
-void killBunny(int num);
+void killBunny(Bunny* del);
 void printInfo(const Bunny* num);
 void printList();
 void progress();

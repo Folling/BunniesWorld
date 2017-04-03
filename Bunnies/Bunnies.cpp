@@ -14,6 +14,7 @@ std::string maleNames[] = { "John", "Peter", "Nathan", "Lars", "Jack", "Danny" }
 std::string femaleNames[] = { "Lessy", "Jessica", "Lilly", "Lucy", "Mary", "Sophie" };
 std::string colours[] = { "white", "black", "spotted", "brown" };
 
+//head of the list
 Bunny* begin = 0;
 
 
@@ -32,7 +33,7 @@ Bunny* newBunny() {
 		begin = node;
 		return begin;
 	}
-	//otherwise it will be added to the end of the list, thus the list is alphabetically sorted
+	//otherwise it will be added to the end of the list, thus the list is sorted by age
 	else {
 		Bunny* node = begin;
 		Bunny* newBunny;
@@ -43,7 +44,7 @@ Bunny* newBunny() {
 		//if male the bunny gets a maleName if female a female one
 		newBunny->name = node->gender == "male" ? maleNames[rand() % 6] : femaleNames[rand() % 6];
 		//every 50th bunny on average will be a mutant
-		newBunny->mutant = rand() % 50 == 0 ? true : false;
+		newBunny->mutant = (rand() % 50 == 0 ? true : false);
 		newBunny->colour = colours[rand() % 4];
 		newBunny->next = 0;
 		node->next = newBunny;
@@ -51,12 +52,15 @@ Bunny* newBunny() {
 	}
 }
 
-//prints the info for the numths bunny in the list
 void printInfo(const Bunny* num) {
 	std::cout << "Gender    ----    " << num->gender << std::endl;
 	std::cout << "Name      ----    " << num->name << std::endl;
 	std::cout << "Age       ----    " << num->age << std::endl;
 	std::cout << "Colour    ----    " << num->colour << std::endl;
+	std::cout << "This bunny is ";
+	if (num->mutant == false) std::cout << "not ";
+	std::cout << "a Mutant!" << std::endl;
+	std::cout << std::endl << std::endl;
 }
 
 //prints every bunny's information in the list
