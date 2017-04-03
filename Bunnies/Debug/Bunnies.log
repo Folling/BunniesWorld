@@ -1,0 +1,4 @@
+﻿  Bunnies.cpp
+c:\users\folling\documents\visual studio 2015\projects\bunnies\bunnies\bunnies.cpp(136): warning C4715: 'checkForExtinction': not all control paths return a value
+  Bunnies.vcxproj -> C:\Users\Folling\documents\visual studio 2015\Projects\Bunnies\Debug\Bunnies.exe
+  Bunnies.vcxproj -> C:\Users\Folling\documents\visual studio 2015\Projects\Bunnies\Debug\Bunnies.pdb (Partial PDB)
