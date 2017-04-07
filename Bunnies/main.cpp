@@ -5,9 +5,10 @@
 int main() {
 	Menu mainscreen;
 	srand((unsigned int)time(0));
-	for (int i = 0; i < 15000; i++) {
+	for (int i = 0; i < startBunnies; i++) {
 		newBunny(colours[rand() % 4]);
 	}
+	currentMutants = countMutants();
 	mainscreen.display();
 	while (true) {
 		mainscreen.getChoice();

@@ -1,7 +1,5 @@
 #include "Menu.h"
-#include "Bunnies.h"
 #include <iostream>
-#include <fstream>
 
 //generic method to display the options each user has, probably am going to just make this visible by command
 void Menu::display() {
@@ -9,9 +7,10 @@ void Menu::display() {
 	std::cout << "1 -- print the list\n";
 	std::cout << "2 -- have another iteration of the colony\n";
 	std::cout << "3 -- provide general informations about the colony\n";
-	std::cout << "4 -- save the current colony\n";
-	std::cout << "5 -- exit the programm\n";
-	std::cout << "6 -- show this menu again\n";
+	std::cout << "4 -- change the characteristics of a Bunny\n";
+	std::cout << "5 -- save the current colony\n";
+	std::cout << "6 -- exit the programm\n";
+	std::cout << "7 -- show this menu again\n";
 }
 
 //gets user input
@@ -26,17 +25,14 @@ void Menu::getChoice() {
 			break;
 		case 3: printColonyInformation();
 			break;
-		case 4: saveColony();
+		case 4: changeBunnyInformation();
 			break;
-		case 5: exit(1);
+		case 5: saveColony();
 			break;
-		case 6: display();
+		case 6: exit(1);
+			break;
+		case 7: display();
 			break;
 		default: std::cout << "Invalid command!\n\n";
 	}
-}
-
-//method to save the colony, to be inmplemented.
-void Menu::saveColony() {
-
 }

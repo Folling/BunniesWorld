@@ -18,7 +18,11 @@ char colours[] = { 'w', 'b', 's', 'r' };
 //head of the list
 Bunny* begin = 0;
 
+const int startBunnies = 5;
 int iterationCount = 0;
+int currentBunnies = startBunnies;
+int currentMutants;
+int diedBunnies = 0;
 
 Bunny* newBunny(char col) {
 	//when list is empty the first bunny becomes it head
@@ -103,20 +107,29 @@ void killBunny(Bunny* del) {
 
 //calculates another iteration of the bunny colony, bunnies die, give birth become mutants etc.
 void progress() {
+	diedBunnies = 0;
 	agingProcess();
 	Bunny* check = begin;
 	while (check->next != 0) {
 		Bunny* temp = check;
 		check = check->next;
-		if (check == 0) break;
-		if (checkForDeath(temp)) killBunny(temp);		
+		if (checkForDeath(temp)) {
+			killBunny(temp);
+			diedBunnies++;
+		}
 	}
-	if(checkForDeath(check)) killBunny(check);
+	if (checkForDeath(check)) {
+		killBunny(check);
+		diedBunnies++; //why do only so few bunnies die?
+	}
 	infectBunnies();
 	reproduction();
 	iterationCount++;
+	currentBunnies = countBunnies();
+	currentMutants = countMutants();
 }
 
+//calculates how many newborn bunnies there will be
 void reproduction() {
 	if (!checkForProperMale()) return;
 	Bunny* check = begin;
@@ -137,7 +150,7 @@ void agingProcess() {
 	}
 }
 
-//counts how many females/male bunnies there are
+//counts how many females/male bunnies there are in the colony
 int countBunniesByGender(char gen) {
 	Bunny* check = begin;
 	int count = 0;
@@ -173,6 +186,7 @@ int countMutants() {
 	return count;
 }
 
+//checks whether there is atleast one male above or = the age of 2 in the colony
 bool checkForProperMale() {
 	Bunny* check = begin;
 	if (check->age >= 2 && check->gender == 'm')return true;
@@ -183,6 +197,7 @@ bool checkForProperMale() {
 	return false;
 }
 
+//infects as many bunnies each turn as there are mutants
 void infectBunnies() {
 	Bunny* check = begin;
 	for (int i = 0; i < countMutants(); i++) {
@@ -199,6 +214,7 @@ void infectBunnies() {
 	}
 }
 
+//returns true if the given bunny is female and older or = 2 years
 bool checkForProperFemale(Bunny* check){
 	if (check->age >= 2 && check->gender == 'f')return true;
 	else return false;
@@ -219,14 +235,16 @@ bool checkForExtinction() {
 
 //provides general information about the colony
 void printColonyInformation() {
-	std::cout << "Total Bunnies:	      " << countBunnies() << std::endl;
-	std::cout << "Males:                " << countBunniesByGender('m') << std::endl;
-	std::cout << "Females:              " << countBunniesByGender('f') << std::endl;
-	std::cout << "Amount of mutants:    " << countMutants() << std::endl;
-	std::cout << "Amount of iterations: " << iterationCount << std::endl;
+	std::cout << "Total Bunnies:	          " << currentBunnies << std::endl;
+	std::cout << "Males:                    " << countBunniesByGender('m') << std::endl;
+	std::cout << "Females:                  " << countBunniesByGender('f') << std::endl;
+	std::cout << "Amount of mutants:        " << currentMutants << std::endl;
+	std::cout << "Amount of iterations:     " << iterationCount << std::endl;
+	std::cout << "Deaths in last iteration: " << diedBunnies << std::endl;
 	std::cout << "\n\n";
 }
 
+//takes a char as an input and returns the corresponding string
 std::string resolveColour(char i) {
 	switch (i) {
 		case 'w' : return "white";
@@ -234,5 +252,142 @@ std::string resolveColour(char i) {
 		case 's' : return "spotted";
 		case 'r' : return "brown";
 		default  : return "undefined colour";
+	}
+}
+
+//gives the user the option to change informations about bunnies, aka Name, age, etc
+void changeBunnyInformation() {
+	using namespace std;
+	int choice, age = 0;
+	std::string newName = " ";
+	char newGen = ' ';
+	char newCol = ' ';
+	Bunny* check = ::begin;
+	cout << "Please Enter which Bunny you want to edit: \t" << endl;
+	if (cin >> choice) {
+		if (choice > currentBunnies) {
+			cout << "That Bunny doesn't exist!\n";
+			changeBunnyInformation();
+		}
+		for (int i = 1; i < choice; i++) {
+			check = check->next;
+		}
+		cout << "What attribute do you want to change?\n 1-5 for age, gender, colour, name, mutant";
+		if (cin >> choice) {
+			switch (choice) {
+			case 1: changeAge(check);
+				break;
+			case 2: changeGender(check);
+				break;
+			case 3: changeColour(check);
+				break;
+			case 4: changeName(check);
+				break;
+			case 5: changeMutant(check);
+				break;
+			default: cout << "Invalid input!\n";
+				break;				
+			}
+
+		}
+	}
+}
+
+//function to change the age of a bunny
+void changeAge(Bunny* a) {
+	int choice;
+	std::cout << "Please enter the new age: \t";
+	if (std::cin >> choice) {
+		if ((a->mutant == true && choice < 50) || (a->mutant == false && choice < 10)) a->age = choice;
+		else {
+			std::cout << "Sorry the age you entered is invalid for the specific bunny!\n";
+			changeAge(a);
+		}
+	}
+	else {
+		std::cout << "Invalid input!\n";
+		changeAge(a);
+	}
+}
+
+//function to change the gender of a bunny
+void changeGender(Bunny* a) {
+	if (a->gender == 'w') a->gender = 'm';
+	else a->gender = 'w';
+}
+
+//function to change the colour of a bunny
+void changeColour(Bunny* a) {
+	char choice;
+	std::cout << "Please enter the new colour: \t";
+	std::cin >> choice;
+	if (choice == 'w' || choice == 'b' || choice == 'r' || choice == 's') {
+		if (a->colour != choice) a->colour = choice;
+		else {
+			std::cout << "Sorry the bunny is already of the colour you entered!\n";
+			changeColour(a);
+		}
+	}
+	else {
+		std::cout << "Invalid input!\n";
+		changeColour(a);
+	}
+}
+
+//function to change the name of a bunny
+void changeName(Bunny* a) {
+	std::string choice;
+	std::cout << "Please enter the new name: \t";
+	if (std::cin >> choice) {
+		if (!isupper(choice[0])) {
+			std::cout << "Please capitilize the name!\n";
+			changeName(a);
+		}
+		else if(a->name != choice) a->name = choice;
+		else {
+			std::cout << "Sorry the bunny already has the name you entered!\n";
+			changeName(a);
+		}	
+	}
+	else {
+		std::cout << "Invalid input!\n";
+		changeName(a);
+	}
+}
+
+//function to switch whether a bunny is mutant or not
+void changeMutant(Bunny *a) {
+	if (a->mutant == true) a->mutant = false;
+	else a->mutant = true;
+}
+
+
+void saveColony() {
+	using namespace std;
+	std::ofstream myfile;
+	myfile.open("BunniesList.txt");
+	Bunny* check = ::begin;
+	int counter = 2;
+	myfile << "1. Bunny: \n\n";
+	//saveBunny(begin);
+	myfile << "Gender    ----    " << ((::begin->gender == 'm') ? "male" : "female") << "\n";;
+	myfile << "Name      ----    " << ::begin->name << std::endl;
+	myfile << "Age       ----    " << ::begin->age << std::endl;
+	myfile << "Colour    ----    " << resolveColour(::begin->colour) << endl;
+	myfile << "This bunny is ";
+	if (::begin->mutant == false) myfile << "not ";
+	myfile << "a Mutant!" << endl << endl;
+
+	while (check->next != 0) {
+		check = check->next;
+		myfile << counter << ". Bunny: \n";
+		myfile << "Gender    ----    " << ((check->gender == 'm') ? "male" : "female") << "\n";;
+		myfile << "Name      ----    " << check->name << std::endl;
+		myfile << "Age       ----    " << check->age << std::endl;
+		myfile << "Colour    ----    " << resolveColour(check->colour) << endl;
+		myfile << "This bunny is ";
+		if (check->mutant == false) myfile  << "not ";
+		myfile << "a Mutant!" << endl << endl;
+		counter++;
 	}
 }
