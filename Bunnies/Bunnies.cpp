@@ -24,7 +24,7 @@ int currentBunnies = startBunnies;
 int currentMutants;
 int diedBunnies = 0;
 
-Bunny* newBunny(char col) {
+void newBunny(char col) {
 	//when list is empty the first bunny becomes it head
 	if (begin == 0) {
 		Bunny* node = new Bunny;
@@ -38,7 +38,7 @@ Bunny* newBunny(char col) {
 		node->colour = col;
 		node->next = 0;
 		begin = node;
-		return begin;
+		//return begin;
 	}
 	//otherwise it will be added to the end of the list, thus the list is sorted by age
 	else {
@@ -56,7 +56,7 @@ Bunny* newBunny(char col) {
 		newBunny->colour = col;
 		newBunny->next = 0;
 		node->next = newBunny;
-		return begin;
+		//return begin;
 	}
 }
 
@@ -361,7 +361,7 @@ void changeMutant(Bunny *a) {
 	else a->mutant = true;
 }
 
-
+//saves all bunnies and their data to a text file
 void saveColony() {
 	using namespace std;
 	std::ofstream myfile;

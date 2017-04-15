@@ -14,7 +14,7 @@ char colours[];
 extern const int startBunnies;
 extern int currentMutants;
 
-Bunny* newBunny(char col);
+void newBunny(char col);
 void killBunny(Bunny* del);
 void printInfo(const Bunny* num);
 void printList();
